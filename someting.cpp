@@ -19,6 +19,7 @@ using namespace std;
 //---------------------------------------------------------------------------------------------------------------------------------------------------------
 double Nstep = 100000;
 
+bool go = true;
 static int spin = 0;
 double t=0.0;
 double theta=0.0;
@@ -100,7 +101,8 @@ void defineArrow( float *apts )
 }
 void mover(void)
 {
-	step(t,theta,omega);
+	if(go)
+		step(t,theta,omega);
 
 //	cout << theta << "	" << toDegs(theta) << endl;
 
@@ -220,14 +222,26 @@ void display( void )
     glutSwapBuffers();
 
 }
+void specs(int key, int x, int y)
+{
+	if (key == GLUT_KEY_LEFT)
+		Nstep*=1.1;
+	if (key == GLUT_KEY_RIGHT)
+		Nstep/=1.1;
+}
 void keyboard(unsigned char key, int x, int y)
 {
 	if (key == 'q' || key =='Q')
 		exit(0);
-	if (key == 'a' )
-		Nstep*=1.1;
-	if (key == 'd' )
-		Nstep*=0.9;
+	if (key == 's' || key == 'S')
+		go = !go;
+	if (key == 'r' || key == 'R')
+	{
+		Nstep = 100000;
+		t=0.0;
+		theta=0.0;
+		omega=1.5;
+	}
 }
 int main(int argc, char** argv)
 {
@@ -247,6 +261,7 @@ cout << "Enter value for initial driving force frequency (0.00): "; cin >> k;
     glutDisplayFunc(display); 
 	glutIdleFunc(mover);	
 	glutKeyboardFunc(keyboard);
+	glutSpecialFunc(specs);
 
     glutMainLoop();
 }
