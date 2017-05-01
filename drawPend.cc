@@ -32,49 +32,7 @@ void drawTheSign(bool drawSign)
 
 	}
 }
-void drawBox( struct box *face, bool filled )
-{
-    int i, j;
-
-    glPolygonMode(GL_FRONT, GL_FILL);
-    glPolygonMode(GL_BACK, GL_FILL);
-
-    glPushMatrix();
-    glTranslatef(0.0,2.0,0.0);
-
-    for(j=0;j<6;j++)
-    {
-
-        glColor3f(face[j].color.red,
-                  face[j].color.green,
-                  face[j].color.blue);
-	if (filled)
-	{
-		glBegin(GL_POLYGON);
-	        for (i=0;i<4;i++)
-        	{
-	            glVertex3f(face[j].point[i].x,
-        	               face[j].point[i].y,
-                	       face[j].point[i].z);
-	        }
-        	glEnd();
-	}
-	glColor3f(0.0,1.0,0.0);
-	glBegin(GL_LINE_LOOP);
-
-        for (i=0;i<4;i++)
-        {
-            glVertex3f(face[j].point[i].x,
-                       face[j].point[i].y,
-                       face[j].point[i].z);
-        }
-        glEnd();
-    }
-
-    glPopMatrix();
-
-}
-void drawBox( struct pentagon *face, bool filled )
+void drawBox( struct pentagon *face, bool room )
 {
     int i, j;
 
@@ -90,18 +48,16 @@ void drawBox( struct pentagon *face, bool filled )
         glColor3f(face[j].color.red,
                   face[j].color.green,
                   face[j].color.blue);
-	if (filled)
-	{
-		glBegin(GL_POLYGON);
+	glBegin(GL_POLYGON);
 	        for (i=0;i<5;i++)
         	{
 	            glVertex3f(face[j].point[i].x,
         	               face[j].point[i].y,
                 	       face[j].point[i].z);
 	        }
-        	glEnd();
-	}
-	glColor3f(0.0,1.0,0.0);
+        glEnd();
+
+	glColor3f(0.0,0.0,1.0);
 	glBegin(GL_LINE_LOOP);
 
         for (i=0;i<5;i++)
@@ -112,14 +68,16 @@ void drawBox( struct pentagon *face, bool filled )
 	//glEnd();
         }
         glEnd();
-    glBegin(GL_LINES);
-    	glVertex3f(1.9938, 0.0, 0.0);
-	glVertex3f(-0.5, 0.0, 0.0);
-    glEnd();
     }
-
+    if(!room)
+    {
+	    glColor3f(1.0,1.0,1.0);
+	    glBegin(GL_LINES);
+    			glVertex3f(1.9938, 0.0, 0.0);
+			glVertex3f(-0.5, 0.0, 0.0);
+	    glEnd();
+    }
     glPopMatrix();
-
 }
 
 #endif

@@ -57,24 +57,6 @@ void keyboard(unsigned char key, int x, int y)
 		zspin = 0.0; zDeltaSpin = 0.0;
 
 	}
-	if (key == 'x' || key == 'X') 
-	{	
-		xDeltaSpin+=0.5; 
-		glutIdleFunc(spinner);
-	}
-	if (key == 'y' || key == 'Y') 
-	{	
-		yDeltaSpin+=0.5; 
-		glutIdleFunc(spinner);
-	}
-	if (key == 'z' || key == 'Z') 
-	{	
-		zDeltaSpin+=0.5; 
-		glutIdleFunc(spinner);
-	}
-	if (key == 'f' || key == 'F') 
-		filled = !filled;
-
 	glutPostRedisplay();
 }
 void special(int key, int x, int y)

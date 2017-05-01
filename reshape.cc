@@ -9,7 +9,7 @@ void reshape (int w, int h)
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity ();
    
-   glFrustum (-1.0,1.0,-1.0,1.0,1.0,50.0);
+   glFrustum (-1.0,1.0,-1.0,1.0,1.0,150.0);
   
    glMatrixMode (GL_MODELVIEW);
 }

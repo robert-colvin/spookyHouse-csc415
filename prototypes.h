@@ -13,7 +13,7 @@ void init(void);
 void p2Ortho( double fov, double aspecty, double zNear, double zFar );
 void o2Persp(double lefty, double righty, double bottomy, double topy, double neary, double fary);
 void drawTheSign(bool);
-void defineBox( struct box* );
+void defineRoom( struct pentagon* );
 void defineBox( struct pentagon* );
 void drawBox( struct box*, bool );
 void drawBox( struct pentagon*, bool );

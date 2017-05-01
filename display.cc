@@ -118,13 +118,15 @@ void mover(void)
 void display(void)
 {
 
-   struct /*box*/pentagon faces[7];
+   struct pentagon faces[7];
+   struct pentagon room[7];
    
    float *M;
    int i, j;
    
 
    defineBox(&faces[0]);
+   defineRoom(&room[0]);
 
    glClear (GL_COLOR_BUFFER_BIT);
    glColor3f (1.0, 1.0, 1.0);
@@ -145,9 +147,14 @@ void display(void)
 
    /* Draw a coordinate axis */
 
-   glEnable(GL_DEPTH_TEST);
+   glEnable(GL_DEPTH_TEST | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glPushMatrix();
+	glScalef(25.0,25.0,25.0);
+	glTranslatef(1,-1.75,0);
+	drawBox(&room[0],true);
+	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(1.9938,0.0,0.0);
 	glRotatef(-90.0,0.0,1.0,0.0);
@@ -157,7 +164,7 @@ void display(void)
 //	glRotatef(yspin,0.0,1.0,0.0);
 
 	glTranslatef(-1.9938,0.0,0.0);
-   	drawBox(&faces[0],filled);
+   	drawBox(&faces[0],false);
 	glPushMatrix();
 	glScalef(0.0025,0.0025,0.0025);
 	//glRotatef(180.0,1.0,0.0,0.0);
