@@ -1,36 +1,28 @@
 
-#include <GL/glut.h>
-
 #ifndef STRUCTS
 #define STRUCTS
 
-typedef struct vertex
-{
-	GLfloat x;
-	GLfloat y;
-	GLfloat z;
-	GLfloat w;
-	vertex *next;
+typedef struct vertex {
+        float x;
+        float y;
+        float z;
+        float w;
 } vertex;
-typedef struct triangle
-{
-	vertex *p1;
-	vertex *p2;
-	vertex *p3;
-	//triangle *next;
-} triangle;
-typedef struct line
-{
-	vertex *p1;
-	vertex *p2;
-	line *next;
-} line;
-typedef struct vArray
-{
-	int length;
-	int *lengthPtr;
-	vertex* vertices[100];
-//	vertex *head;
-} vArray;
-#endif
 
+typedef struct colortype {
+	float red;
+	float green;
+	float blue;
+} colortype;
+
+typedef struct box {
+	vertex point[4];
+	colortype color;	
+} box;
+
+typedef struct pentagon {
+	vertex point[5];
+	colortype color;
+} pentagon;
+
+#endif
