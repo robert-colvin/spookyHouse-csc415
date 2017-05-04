@@ -20,7 +20,8 @@ using namespace std;
 bool filled = false;
 bool drawAxis = false;
 bool drawSign = false;
-float zoomy = 0.0;
+vertex whereIAm = (vertex) {2, 2, 2, 1};
+float zoomy=0.0, strafey=0.0, lookx=0.0, looky=0.0, lookUp=0.0;
 int persp = 1;
 
 void keyboard(unsigned char key, int x, int y)
@@ -29,22 +30,26 @@ void keyboard(unsigned char key, int x, int y)
 		exit(0);
 	if (key == 'r')
 	{
-		yspin = 0.0; yDeltaSpin = 0.0;
-		xspin = 0.0; xDeltaSpin = 0.0;
-		zspin = 0.0; zDeltaSpin = 0.0;
-		
 		Nstep = 100000;
 		t = 0.0;
 		theta = 0.0;
 		omega = 1.5;
 	}
-	if (key == 's' || key == 'S')
+	if(key == 'd' || key == 'D')
 	{
-		yDeltaSpin = 0.0;
-		xDeltaSpin = 0.0;
-		zDeltaSpin = 0.0;
-
-		go = !go;
+		whereIAm.x+=0.5;
+	}
+	if(key == 'w' || key == 'W')
+	{
+		whereIAm.y+=0.5;
+	}
+	if(key == 's' || key == 'S')
+	{
+		whereIAm.y-=0.5;
+	}
+	if(key == 'a' || key == 'A')
+	{
+		whereIAm.x-=0.5;
 	}
 	if (key == 'R')
 	{
@@ -61,15 +66,16 @@ void keyboard(unsigned char key, int x, int y)
 }
 void special(int key, int x, int y)
 {
-	if (key == GLUT_KEY_PAGE_UP)
-		zoomy = zoomy - 0.05;
-	if (key == GLUT_KEY_PAGE_DOWN)
-		zoomy = zoomy + 0.05;
+	if (key == GLUT_KEY_UP)
+		xspin-=1;
+	if (key == GLUT_KEY_DOWN)
+		xspin+=1;
+	if (key == GLUT_KEY_LEFT)
+		yspin-=1;
+	if (key == GLUT_KEY_RIGHT)
+		yspin+=1;
 
 	glutPostRedisplay();
-}
-void mouse(int button, int state, int x, int y)
-{
 }
 int main(int argc, char** argv)
 {
@@ -79,7 +85,7 @@ int main(int argc, char** argv)
    glutInitWindowPosition (100, 100);
    glutCreateWindow ("Welcome to Hell");
    init ();
-   glutMouseFunc(mouse);
+//   glutMouseFunc(mouse);
    glutKeyboardFunc(keyboard);
    glutSpecialFunc(special);
    glutIdleFunc(mover);

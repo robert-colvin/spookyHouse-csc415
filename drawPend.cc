@@ -57,7 +57,7 @@ void drawBox( struct pentagon *face, bool room )
 	        }
         glEnd();
 
-	glColor3f(0.0,0.0,1.0);
+	glColor4f(0.0,0.0,1.0, 1.0);
 	glBegin(GL_LINE_LOOP);
 
         for (i=0;i<5;i++)
@@ -71,7 +71,7 @@ void drawBox( struct pentagon *face, bool room )
     }
     if(!room)
     {
-	    glColor3f(1.0,1.0,1.0);
+	    glColor4f(1.0,1.0,1.0,1.0);
 	    glBegin(GL_LINES);
     			glVertex3f(1.9938, 0.0, 0.0);
 			glVertex3f(-0.5, 0.0, 0.0);

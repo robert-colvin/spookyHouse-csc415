@@ -4,10 +4,10 @@
 #include "structs.h"
 
 extern bool filled, drawAxis, drawSign;
-extern float xspin, yspin, zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin, zoomy;
+extern float xspin, yspin, zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin,lookUp,lookx,looky,strafey,zoomy;
 extern double near,far,left0,right0,fovY,aspect,bottom,top;
 extern int persp;
-
+extern vertex whereIAm;
 void spinner(void);
 void init(void);
 void p2Ortho( double fov, double aspecty, double zNear, double zFar );

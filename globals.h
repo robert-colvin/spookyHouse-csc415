@@ -9,6 +9,8 @@
 extern const int WINDOW_HEIGHT;
 extern const int WINDOW_WIDTH;
 
+extern int oldTime;
+extern float actualfps, fps;
 extern double Nstep;
 extern bool go;
 extern float transCoord;

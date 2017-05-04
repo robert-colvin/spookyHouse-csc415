@@ -8,11 +8,13 @@ using namespace std;
 #include "globals.h"
 #include "structs.h"
 #include "prototypes.h"
+#include <cstring>
+#include <cstdio>
 #include <cmath>
 #include <iostream>
 
 double left0=-1.0;double right0=1.0;double bottom=-1.0;double top=1.0;double near=1.0;double far=50.0;double aspect = 0.0; double fovY = 0.0;
-
+int oldTime=0.0; float actualfps=0.0,fps=0.0;
 void p2Ortho( double fov, double aspecty, double zNear, double zFar )
 {//
 	near = zNear;
@@ -75,6 +77,41 @@ double omegadot(double t, double theta, double omega)
 	
 }
 
+void showFPS(float &fps, int &oldTime, float &actualfps) {
+    int currentTime = glutGet(GLUT_ELAPSED_TIME);
+    char str_fps[15];
+    if ( (currentTime - oldTime) > 1000 ){
+        actualfps = fps;
+        fps = 0.0;
+        oldTime = currentTime;
+    } else
+        fps++;
+    sprintf(&str_fps[0], "FPS = %.0f",actualfps);
+
+
+    glPushMatrix();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    void *font = GLUT_STROKE_ROMAN;
+    glColor3f(1.0,1.0,1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity(); // reset the projection style
+    gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(01, 03, 0);
+    glScalef(0.15, 0.15, 0.15);
+
+    glRotatef(180.0, 1.0, 0.0, 0.0);
+    glScalef(0.055,0.055,0.055);
+    int len = (int) strlen(str_fps);
+    for (int i = 0; i < len; i++) {
+        glutStrokeCharacter(font, str_fps[i]);
+    }
+    glPopMatrix();
+}
 
 void step(double &t, double &theta, double &omega )
 {
@@ -115,6 +152,17 @@ void mover(void)
 		step(t,theta,omega);
 	glutPostRedisplay();
 }
+void drawHud() {//to draw the 2d hud on 3d scene
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity(); // reset the projection style
+	gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
+	//draw 2D stuff
+	showFPS(fps, oldTime, actualfps);
+}
 void display(void)
 {
 
@@ -129,7 +177,7 @@ void display(void)
    defineRoom(&room[0]);
 
    glClear (GL_COLOR_BUFFER_BIT);
-   glColor3f (1.0, 1.0, 1.0);
+   glColor4f (1.0, 1.0, 1.0, 1.0);
 
 /* ONLY MODIFY CODE BELOW */
 
@@ -141,15 +189,20 @@ void display(void)
    glTranslatef(0.0, 0.0, -10.0);
 
   
-   gluLookAt (2+zoomy, 2+zoomy, 2+zoomy, -10.0, -10.0, -10.0, 0.0, 0.0, 1.0);
+	glRotatef(zspin,0.0,0.0,1.0);
+	glRotatef(xspin,1.0,0.0,0.0);
+	glRotatef(yspin,0.0,1.0,0.0);
+   gluLookAt (0, 0, 0.5, 0.0, -1.0, 0.5, 0.0, 0.0, 1.0);
 
+	glTranslatef(whereIAm.x, whereIAm.y, whereIAm.z);
 /* DO NOT MODIFY ANYTHING ELSE */
 
    /* Draw a coordinate axis */
 
-   glEnable(GL_DEPTH_TEST | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
+   glEnable(GL_TEXTURE_2D | GL_DEPTH_TEST | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	drawHud();
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
@@ -159,9 +212,6 @@ void display(void)
 	glTranslatef(1.9938,0.0,0.0);
 	glRotatef(-90.0,0.0,1.0,0.0);
 	glRotatef(toDegs(theta), 0.0, 1.0, 0.0);
-//	glRotatef(zspin,0.0,0.0,1.0);
-//	glRotatef(xspin,1.0,0.0,0.0);
-//	glRotatef(yspin,0.0,1.0,0.0);
 
 	glTranslatef(-1.9938,0.0,0.0);
    	drawBox(&faces[0],false);
@@ -176,7 +226,6 @@ void display(void)
 	glPopMatrix();
 //drawTheSign(drawSign);
 	glPopMatrix();
-
 
    glutSwapBuffers();
 
