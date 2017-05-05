@@ -44,7 +44,7 @@ void o2Persp(double lefty, double righty, double bottomy, double topy, double ne
 	
 	gluPerspective(fovY,aspect,neary,fary);
 }
-double Nstep = 100000;
+double Nstep = 1000;//this variable has so much fucking power
 bool go = true;
 static int spin = 0;
 double t=0.0;
@@ -243,14 +243,87 @@ void display(void)
 
    /* Draw a coordinate axis */
 
-   glEnable(GL_TEXTURE_2D | GL_DEPTH_TEST | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
+   glEnable(GL_TEXTURE_2D | GL_DEPTH_TEST);// | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
 	drawBox(&room[0],true);
-	glPopMatrix();
+	
+    glPushMatrix();
+    glTranslatef(light_0_position[0],light_0_position[1],light_0_position[2]); 
+    glutSolidSphere(0.5,20,20);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(light_1_position[0],light_1_position[1],light_1_position[2]); 
+    glutSolidSphere(0.5,20,20);
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(light_2_position[0],light_2_position[1],light_2_position[2]); 
+    glutSolidCube(0.5);
+    glPopMatrix();
+    
+    glPushMatrix();
+    glTranslatef(light_3_position[0],light_3_position[1],light_3_position[2]); 
+    glutSolidSphere(0.5, 20, 20);
+    glPopMatrix();
+/*	    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(0,0,-1);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 0.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 0.0 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(0,0,1);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(-1,0,0);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0,  0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(1,0,0);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0,  0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(0,-1,0);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
+    glEnd();
+
+    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBegin(GL_POLYGON);
+      glNormal3d(0,1,0);
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0, 10.0,  0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0, 10.0,  0.0 );
+    glEnd();
+*/	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(1.9938,0.0,0.0);
 	glRotatef(-90.0,0.0,1.0,0.0);
@@ -260,17 +333,16 @@ void display(void)
    	drawBox(&faces[0],false);
 	glPushMatrix();
 	glScalef(0.0025,0.0025,0.0025);
-	//glRotatef(180.0,1.0,0.0,0.0);
 	glRotatef(180.0,0.0,1.0,0.0);
 	glTranslatef(-350.0,1220.0,-200.0);
 	glRotatef(270.0,1.0,0.0,0.0);
-//	drawBox(&faces[0],filled);   
-	drawTheSign(drawSign);
 	glPopMatrix();
 	glPopMatrix();
 
 	glClear(GL_DEPTH_BUFFER_BIT);
+	glPushMatrix();
 	drawHud();
+	glPopMatrix();
 	glClear(GL_DEPTH_BUFFER_BIT);
    glutSwapBuffers();
    glutPostRedisplay();

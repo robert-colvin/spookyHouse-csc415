@@ -8,6 +8,7 @@ extern float xspin, yspin, zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin,lookUp,lookx,l
 extern double near,far,left0,right0,fovY,aspect,bottom,top;
 extern int persp;
 extern vertex whereIAm;
+void loadTextures();
 void spinner(void);
 void init(void);
 void p2Ortho( double fov, double aspecty, double zNear, double zFar );

@@ -186,31 +186,31 @@ void defineBox(pentagon *face /*box *face*/ )
 	face[6].point[4].w =  1.0;
 // Define the colors
 //
-	face[0].color.red   = 0.0;
+	face[0].color.red   = 1.0;
 	face[0].color.green = 0.0;
 	face[0].color.blue  = 1.0;
 	
-	face[1].color.red   = 0.0;
+	face[1].color.red   = 1.0;
 	face[1].color.green = 0.0;
 	face[1].color.blue  = 1.0;
 	
-	face[2].color.red   = 0.0;
+	face[2].color.red   = 1.0;
 	face[2].color.green = 0.0;
 	face[2].color.blue  = 1.0;
 
-	face[3].color.red   = 0.0;
+	face[3].color.red   = 1.0;
 	face[3].color.green = 0.0;
 	face[3].color.blue  = 1.0;
 
-	face[4].color.red   = 0.0;
+	face[4].color.red   = 1.0;
 	face[4].color.green = 0.0;
 	face[4].color.blue  = 1.0;
 
-	face[5].color.red   = 0.0;
+	face[5].color.red   = 1.0;
 	face[5].color.green = 0.0;
 	face[5].color.blue  = 1.0;
 	
-	face[6].color.red   = 0.0;
+	face[6].color.red   = 1.0;
 	face[6].color.green = 0.0;
 	face[6].color.blue  = 1.0;
 	
@@ -398,33 +398,33 @@ void defineRoom(pentagon *face /*box *face*/ )
 	face[6].point[4].w =  1.0;
 // Define the colors
 //
-	face[0].color.red   = 1.0;
-	face[0].color.green = 1.0;
-	face[0].color.blue  = 1.0;
+	face[0].color.red   = 0.0;
+	face[0].color.green = 0.0;
+	face[0].color.blue  = 0.0;
 	
-	face[1].color.red   = 1.0;
-	face[1].color.green = 1.0;
-	face[1].color.blue  = 1.0;
+	face[1].color.red   = 0.0;
+	face[1].color.green = 0.0;
+	face[1].color.blue  = 0.0;
 	
-	face[2].color.red   = 1.0;
-	face[2].color.green = 1.0;
-	face[2].color.blue  = 1.0;
+	face[2].color.red   = 0.0;
+	face[2].color.green = 0.0;
+	face[2].color.blue  = 0.0;
 
-	face[3].color.red   = 1.0;
-	face[3].color.green = 1.0;
-	face[3].color.blue  = 1.0;
+	face[3].color.red   = 0.0;
+	face[3].color.green = 0.0;
+	face[3].color.blue  = 0.0;
 
-	face[4].color.red   = 1.0;
-	face[4].color.green = 1.0;
-	face[4].color.blue  = 1.0;
+	face[4].color.red   = 0.0;
+	face[4].color.green = 0.0;
+	face[4].color.blue  = 0.0;
 
-	face[5].color.red   = 1.0;
-	face[5].color.green = 1.0;
-	face[5].color.blue  = 1.0;
+	face[5].color.red   = 0.0;
+	face[5].color.green = 0.0;
+	face[5].color.blue  = 0.0;
 	
-	face[6].color.red   = 1.0;
-	face[6].color.green = 1.0;
-	face[6].color.blue  = 1.0;
+	face[6].color.red   = 0.0;
+	face[6].color.green = 0.0;
+	face[6].color.blue  = 0.0;
 	
 }
 #endif

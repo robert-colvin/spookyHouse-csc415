@@ -2,6 +2,7 @@
 #define DRAWBOX
 
 #include "opengl.h"
+#include "globals.h"
 #include <string.h>
 #include "structs.h"
 float xspin,yspin,zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin;
@@ -17,20 +18,6 @@ void spinner(void)
 	if (zspin > 360.0) zspin = zspin-360.0;
 
 	glutPostRedisplay();
-}
-void drawTheSign(bool drawSign)
-{
-	if(drawSign)
-	{
-		glColor3f(1.0,0.0,0.0);
-		char sign[] = "Hello World";
-		void *font = GLUT_STROKE_ROMAN;
-		
-		int len = (int) strlen(sign);
-		for(int i=0;i<len;i++)
-			glutStrokeCharacter(font,sign[i]);
-
-	}
 }
 void drawBox( struct pentagon *face, bool room )
 {
@@ -48,6 +35,7 @@ void drawBox( struct pentagon *face, bool room )
         glColor3f(face[j].color.red,
                   face[j].color.green,
                   face[j].color.blue);
+	glBindTexture(GL_TEXTURE_2D, textureID[0]);
 	glBegin(GL_POLYGON);
 	        for (i=0;i<5;i++)
         	{
@@ -65,6 +53,9 @@ void drawBox( struct pentagon *face, bool room )
             glVertex3f(face[j].point[i].x,
                        face[j].point[i].y,
                        face[j].point[i].z);
+	    glTexCoord3d(face[j].point[i].x,
+                       face[j].point[i].y,
+               	       face[j].point[i].z);
 	//glEnd();
         }
         glEnd();

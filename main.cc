@@ -3,6 +3,7 @@
 
 using namespace std;
 
+#include "sysincludes.h"
 #include <math.h>
 #include "opengl.h"
 #include "structs.h"
@@ -17,7 +18,7 @@ using namespace std;
 #define VIEWPORT_MIN 100
 #define MAX 100
 
-bool filled = false;
+bool filled = !false;
 bool drawAxis = false;
 bool drawSign = false;
 vertex whereIAm = (vertex) {2, 2, 2, 1};
@@ -84,7 +85,9 @@ int main(int argc, char** argv)
    glutInitWindowSize (WINDOW_HEIGHT, WINDOW_WIDTH); 
    glutInitWindowPosition (100, 100);
    glutCreateWindow ("Welcome to Hell");
+   glewInit();
    init ();
+   //loadTextures();
 //   glutMouseFunc(mouse);
    glutKeyboardFunc(keyboard);
    glutSpecialFunc(special);
