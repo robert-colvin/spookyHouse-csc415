@@ -77,6 +77,45 @@ double omegadot(double t, double theta, double omega)
 	
 }
 
+void drawScore(){
+	//push matrix so we don't contaminate matrix we were working in with transformations
+	glPushMatrix();
+		
+		int i, len;
+		//char array to print to screen
+		char label[] = "Score: ";
+		//font used when printing
+		void *font = GLUT_STROKE_ROMAN;
+		//transformations that looked ok; no particular meaning behind numbers
+		glTranslatef(82, 90, 0);
+		glScalef(0.15, 0.15, 0.15);
+		
+		glPushMatrix();
+			glColor3f(1.0,1.0,1.0);
+			glRotatef(180.0,1.0,0.0,0.0);
+			glScalef(0.125,0.125,0.125);
+			glTranslatef(-550.0, 100, 0);
+			//store number of characters to print
+			len = (int) strlen(label);
+			//print every char in label using that font
+			for(i = 0;i<len;i++)
+				glutStrokeCharacter(font, label[i]);
+			//use an ostringstream to turn number into string and print
+/*			std::ostringstream printNum;
+			std::string printy;
+			//put score int into stream
+			printNum << GLOBAL.score;
+			//return stream contents as string
+			printy = printNum.str();
+			//store number of chars to print and print them
+			len = (int) strlen(&printy[0]);
+			for(i = 0;i<len;i++)
+				glutStrokeCharacter(font,printy[i]);
+
+			printNum.str("");
+*/		glPopMatrix();
+	glPopMatrix();
+}
 void showFPS(float &fps, int &oldTime, float &actualfps) {
     int currentTime = glutGet(GLUT_ELAPSED_TIME);
     char str_fps[15];
@@ -93,7 +132,7 @@ void showFPS(float &fps, int &oldTime, float &actualfps) {
     glClear(GL_DEPTH_BUFFER_BIT);
 
     void *font = GLUT_STROKE_ROMAN;
-    glColor3f(1.0,1.0,1.0);
+    glColor3f(1.0,0.0,1.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity(); // reset the projection style
     gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
@@ -105,7 +144,7 @@ void showFPS(float &fps, int &oldTime, float &actualfps) {
     glScalef(0.15, 0.15, 0.15);
 
     glRotatef(180.0, 1.0, 0.0, 0.0);
-    glScalef(0.055,0.055,0.055);
+    glScalef(0.1,0.1,0.1);
     int len = (int) strlen(str_fps);
     for (int i = 0; i < len; i++) {
         glutStrokeCharacter(font, str_fps[i]);
@@ -165,7 +204,12 @@ void drawHud() {//to draw the 2d hud on 3d scene
 }
 void display(void)
 {
-
+   glMatrixMode (GL_PROJECTION);
+   glLoadIdentity ();
+   
+   glFrustum (-1.0,1.0,-1.0,1.0,1.0,150.0);
+  
+   glMatrixMode (GL_MODELVIEW);
    struct pentagon faces[7];
    struct pentagon room[7];
    
@@ -202,7 +246,6 @@ void display(void)
    glEnable(GL_TEXTURE_2D | GL_DEPTH_TEST | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	drawHud();
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
@@ -224,11 +267,13 @@ void display(void)
 //	drawBox(&faces[0],filled);   
 	drawTheSign(drawSign);
 	glPopMatrix();
-//drawTheSign(drawSign);
 	glPopMatrix();
 
+	glClear(GL_DEPTH_BUFFER_BIT);
+	drawHud();
+	glClear(GL_DEPTH_BUFFER_BIT);
    glutSwapBuffers();
-
+   glutPostRedisplay();
 }
 
 #endif
