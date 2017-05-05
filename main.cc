@@ -10,6 +10,7 @@ using namespace std;
 #include "prototypes.h"
 #include "globals.h"
 #include "constants.h"
+#include <cstring>
 #include <iostream>
 
 #define WINDOW_MAX 800
@@ -39,18 +40,23 @@ void keyboard(unsigned char key, int x, int y)
 	if(key == 'd' || key == 'D')
 	{
 		whereIAm.x+=0.5;
+		cout << "x is " << whereIAm.x << endl;	
 	}
 	if(key == 'w' || key == 'W')
 	{
-		whereIAm.y+=0.5;
+		if(whereIAm.y < 27.5)
+			whereIAm.y+=0.5;
 	}
 	if(key == 's' || key == 'S')
 	{
-		whereIAm.y-=0.5;
+		if(whereIAm.y > -22)
+			whereIAm.y-=0.5;
 	}
 	if(key == 'a' || key == 'A')
 	{
 		whereIAm.x-=0.5;
+		cout << "x is " << whereIAm.x << endl;	
+		
 	}
 	if (key == 'R')
 	{
@@ -75,8 +81,67 @@ void special(int key, int x, int y)
 		yspin-=1;
 	if (key == GLUT_KEY_RIGHT)
 		yspin+=1;
+	if (key == GLUT_KEY_PAGE_UP)
+		whereIAm.z-=0.5;
+	if (key == GLUT_KEY_PAGE_DOWN)
+		whereIAm.z+=0.5;
 
 	glutPostRedisplay();
+}
+void renderBitmapString(
+		float x, 
+		float y, 
+		void *font, 
+		string stringval) {  
+  int i;
+  glRasterPos2f(x, y);
+  glColor3f(1.0,1.0,1.0);
+  for (i=0; i < stringval.size(); i++) {
+    glutBitmapCharacter(font, stringval.at(i) );
+  }
+}
+void phaseDisplay(void)
+{
+/*	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity(); // reset the projection style
+	gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+*/
+/*	glPointSize(1.0);
+	glBegin(GL_LINES);
+		glVertex2d(0,0);
+		glVertex2d(5,5);
+	glEnd();
+   */string s;
+   char c[100];
+ 
+   void *font = GLUT_BITMAP_TIMES_ROMAN_24;
+
+   glClear (GL_COLOR_BUFFER_BIT  );
+   
+
+   glColor3f(1.0,1.0,0.0); 
+   s = "Fire Control Settings";
+   renderBitmapString(-.8,0.8,font,s);
+}
+void phaseSpace()
+{
+	glClearColor(1.0,1.0,1.0,0.0);
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT);
+//   glutInit(&argc, argv);
+   glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
+   glutInitWindowSize (WINDOW_HEIGHT, WINDOW_WIDTH); 
+   glutInitWindowPosition (100+WINDOW_WIDTH, 100);
+   glutCreateWindow ("Phased");
+   
+   glutDisplayFunc(phaseDisplay); 
+   glutReshapeFunc(reshape);
+
+   glutKeyboardFunc(keyboard);
+
 }
 int main(int argc, char** argv)
 {
@@ -94,6 +159,8 @@ int main(int argc, char** argv)
    glutIdleFunc(mover);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape);
+
+	phaseSpace();
 
    glutMainLoop();
    return 0;

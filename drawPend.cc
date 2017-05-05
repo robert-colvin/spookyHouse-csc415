@@ -35,7 +35,6 @@ void drawBox( struct pentagon *face, bool room )
         glColor3f(face[j].color.red,
                   face[j].color.green,
                   face[j].color.blue);
-	glBindTexture(GL_TEXTURE_2D, textureID[0]);
 	glBegin(GL_POLYGON);
 	        for (i=0;i<5;i++)
         	{

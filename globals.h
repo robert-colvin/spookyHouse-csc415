@@ -9,7 +9,7 @@
 extern const int WINDOW_HEIGHT;
 extern const int WINDOW_WIDTH;
 
-extern GLuint textureID[3];
+extern GLuint textureID;
 extern GLUquadric *earth;
 
 extern int oldTime;
@@ -20,8 +20,6 @@ extern float transCoord;
 extern double t;
 extern double theta;
 extern double omega;
-extern GLuint textureID[3];
-extern GLUquadric *earth;
 
 extern GLfloat global_ambient[4];
 extern GLfloat material_diffuse[4];

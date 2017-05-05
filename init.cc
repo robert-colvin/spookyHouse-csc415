@@ -4,7 +4,7 @@
 
 #include "opengl.h"
 #include "globals.h"
-
+#include <stdio.h>
 void loadTextures();
 
 GLfloat global_ambient[4];
@@ -64,7 +64,6 @@ void init(void)
    glShadeModel (GL_FLAT);
   
    loadTextures();
- 
    global_ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
    glShadeModel(GL_SMOOTH);
@@ -85,10 +84,10 @@ void init(void)
 
 // These are light properties -- notice, specified for EACH light
 
-   light_0_position =  {  5.0,  5.0,  0.0, 1.0 };
-   light_0_ambient  =  {  0.3,  0.0,  0.0, 1.0 };
-   light_0_diffuse  =  {  0.2,  1.0,  0.0, 1.0 };
-   light_0_specular =  {  0.0,  1.0,  0.0, 1.0 };
+   light_0_position =  {  -1.2,  1.5,  0.0, 1.0 };
+   light_0_ambient  =  {  0.0,  0.1,  0.0, 1.0 };
+   light_0_diffuse  =  {  0.0,  0.0,  0.0, 1.0 };
+   light_0_specular =  {  0.0,  0.0,  0.0, 1.0 };
    glLightfv(GL_LIGHT0, GL_POSITION, light_0_position);
    glLightfv(GL_LIGHT0, GL_AMBIENT, light_0_ambient);
    glLightfv(GL_LIGHT0, GL_DIFFUSE, light_0_diffuse);
@@ -96,7 +95,7 @@ void init(void)
 
 // Lets set up a second light
 
-   light_1_position =  {  5.0,  10.0,  5.0, 1.0 };
+   light_1_position =  {  -2.0,  1.5,  0.0, 1.0 };
    light_1_ambient  =  {  0.0,  0.0,  0.0, 1.0 };
    light_1_diffuse  =  {  0.0,  0.0,  0.0, 1.0 };
    light_1_specular =  {  0.0,  0.0,  0.0, 1.0 };
@@ -107,10 +106,10 @@ void init(void)
 
 // And now its time for a spotlight
 
-   light_2_position =  {  0.0,  0.0,  0.0, 1.0 };
+   light_2_position =  {  -1.0,  1.5,  0.0, 1.0 };
    light_2_ambient  =  {  1.0,  1.0,  1.0, 1.0 };
    light_2_diffuse  =  {  1.0,  1.0,  1.0, 1.0 };
-   light_2_specular =  {  1.0,  1.0,  1.0, 1.0 };
+   light_2_specular =  {  0.0,  0.0,  0.0, 1.0 };
    light_2_spot_direction = { 100.0, 100.0, 100.0 };
    light_2_spot_cutoff = 10.0;
    light_2_spot_exponent = 64;
@@ -125,21 +124,21 @@ void init(void)
    glLightfv(GL_LIGHT2, GL_SPOT_EXPONENT, &light_2_spot_exponent);
    glLightfv(GL_LIGHT2, GL_LINEAR_ATTENUATION, &light_2_gl_linear_attenuation);
    
-   light_3_position =  {  3.0,  2.0,  4.0, 1.0 };
-   light_3_ambient  =  {  0.0,  0.0,  0.2, 1.0 };
-   light_3_diffuse  =  {  0.0,  0.0,  0.0, 1.0 };
-   light_3_specular =  {  0.0,  0.0,  0.0, 1.0 };
+   light_3_position =  {  -1.5,  1.5,  0.0, 1.0 };
+   light_3_ambient  =  {  0.0,  0.0,  0.0, 1.0 };
+   light_3_diffuse  =  {  0.1,  0.1,  0.1, 1.0 };
+   light_3_specular =  {  0.0,  0.8,  0.0, 1.0 };
    glLightfv(GL_LIGHT3, GL_POSITION, light_3_position);
    glLightfv(GL_LIGHT3, GL_AMBIENT, light_3_ambient);
    glLightfv(GL_LIGHT3, GL_DIFFUSE, light_3_diffuse);
    glLightfv(GL_LIGHT3, GL_SPECULAR, light_3_specular);
  
 
-   glEnable(GL_LIGHTING);
-   glEnable(GL_LIGHT0);
-   glEnable(GL_LIGHT1);
-   glEnable(GL_LIGHT2);
-   glEnable(GL_LIGHT3);
+//   glEnable(GL_LIGHTING);
+  // glEnable(GL_LIGHT0);
+//   glEnable(GL_LIGHT1);
+//   glEnable(GL_LIGHT2);
+//   glEnable(GL_LIGHT3);
 }
 
 #endif

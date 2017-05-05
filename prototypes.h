@@ -19,6 +19,7 @@ void defineBox( struct pentagon* );
 void drawBox( struct box*, bool );
 void drawBox( struct pentagon*, bool );
 void display(void);
+void showFPS(float &fps, int &oldTime, float &actualfps); 
 void reshape (int , int );
 void mover(void);
 /*

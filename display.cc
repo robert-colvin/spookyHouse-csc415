@@ -177,14 +177,6 @@ void step(double &t, double &theta, double &omega )
 
 }
 
-void rotateItGLStyle(GLfloat angle)
-{
-	//glPushMatrix();
-	glTranslatef(transCoord,transCoord,0.0);
-	glRotatef(angle,0.0,0.0,1.0);
-	glTranslatef(-transCoord,-transCoord,0.0);
-	//glPopMatrix();
-}
 void mover(void)
 {
 	if(go)
@@ -206,7 +198,7 @@ void display(void)
 {
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity ();
-   
+   glClearColor(0.0,0.0,0.0,0.0);
    glFrustum (-1.0,1.0,-1.0,1.0,1.0,150.0);
   
    glMatrixMode (GL_MODELVIEW);
@@ -249,37 +241,38 @@ void display(void)
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
-	drawBox(&room[0],true);
-	
+//	drawBox(&room[0],true);
+/*	
     glPushMatrix();
     glTranslatef(light_0_position[0],light_0_position[1],light_0_position[2]); 
-    glutSolidSphere(0.5,20,20);
+    glutSolidSphere(0.25,20,20);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(light_1_position[0],light_1_position[1],light_1_position[2]); 
-    glutSolidSphere(0.5,20,20);
+    glutSolidSphere(0.25,20,20);
     glPopMatrix();
 
     glPushMatrix();
     glTranslatef(light_2_position[0],light_2_position[1],light_2_position[2]); 
-    glutSolidCube(0.5);
+    glutSolidCube(0.25);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(light_3_position[0],light_3_position[1],light_3_position[2]); 
-    glutSolidSphere(0.5, 20, 20);
+    glutSolidSphere(0.25, 20, 20);
     glPopMatrix();
-/*	    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+*/
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(0,0,-1);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 0.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 0.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 0.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 0.0 );
+      glTexCoord3d( 0.0, 0.0, 1.0);   glVertex3d(  0.0,  0.0, 0.0 );
+      glTexCoord3d( 0.0, 1.0, 1.0);   glVertex3d(  0.0, 0.0, 5.0 );
+      glTexCoord3d( 1.0, 1.0, 1.0);   glVertex3d( 0.0, 5.0, 5.0 );
+      glTexCoord3d( 1.0, 0.0, 1.0);   glVertex3d( 0.0,  5.0, 0.0 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+  /*  glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(0,0,1);
       glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
@@ -288,7 +281,7 @@ void display(void)
       glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(-1,0,0);
       glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
@@ -297,7 +290,7 @@ void display(void)
       glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(1,0,0);
       glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
@@ -306,7 +299,7 @@ void display(void)
       glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(0,-1,0);
       glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
@@ -315,7 +308,7 @@ void display(void)
       glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureID[0]);
+    glBindTexture(GL_TEXTURE_2D, textureID);
     glBegin(GL_POLYGON);
       glNormal3d(0,1,0);
       glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0, 10.0,  0.0 );
@@ -323,7 +316,9 @@ void display(void)
       glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
       glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0, 10.0,  0.0 );
     glEnd();
-*/	glPopMatrix();
+*/
+
+	glPopMatrix();
 	glPushMatrix();
 	glTranslatef(1.9938,0.0,0.0);
 	glRotatef(-90.0,0.0,1.0,0.0);
