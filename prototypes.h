@@ -11,6 +11,7 @@ extern vertex whereIAm;
 void loadTextures();
 void spinner(void);
 void init(void);
+double toDegs(double);
 void p2Ortho( double fov, double aspecty, double zNear, double zFar );
 void o2Persp(double lefty, double righty, double bottomy, double topy, double neary, double fary);
 void drawTheSign(bool);

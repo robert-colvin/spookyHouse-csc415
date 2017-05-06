@@ -5,6 +5,9 @@
 #include "opengl.h"
 #include "globals.h"
 #include <stdio.h>
+
+GLUquadric *earth;
+
 void loadTextures();
 
 GLfloat global_ambient[4];
@@ -64,6 +67,10 @@ void init(void)
    glShadeModel (GL_FLAT);
   
    loadTextures();
+   
+   earth = gluNewQuadric();
+   gluQuadricTexture(earth,GL_TRUE);
+
    global_ambient = { 0.5f, 0.5f, 0.5f, 1.0f };
    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
    glShadeModel(GL_SMOOTH);
@@ -134,11 +141,11 @@ void init(void)
    glLightfv(GL_LIGHT3, GL_SPECULAR, light_3_specular);
  
 
-//   glEnable(GL_LIGHTING);
-  // glEnable(GL_LIGHT0);
-//   glEnable(GL_LIGHT1);
-//   glEnable(GL_LIGHT2);
-//   glEnable(GL_LIGHT3);
+   glEnable(GL_LIGHTING);
+   glEnable(GL_LIGHT0);
+   glEnable(GL_LIGHT1);
+   glEnable(GL_LIGHT2);
+   glEnable(GL_LIGHT3);
 }
 
 #endif

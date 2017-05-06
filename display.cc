@@ -12,44 +12,17 @@ using namespace std;
 #include <cstdio>
 #include <cmath>
 #include <iostream>
+#define L	10.9938
+#define G	9.80665
 
 double left0=-1.0;double right0=1.0;double bottom=-1.0;double top=1.0;double near=1.0;double far=50.0;double aspect = 0.0; double fovY = 0.0;
 int oldTime=0.0; float actualfps=0.0,fps=0.0;
-void p2Ortho( double fov, double aspecty, double zNear, double zFar )
-{//
-	near = zNear;
-	far = zFar;
-	
-    const GLdouble pi = 3.1415926535897932384626433832795;
-    GLdouble fW, fH;
-
-    //fH = tan( (fovY / 2) / 180 * pi ) * zNear;
-    fH = tan( fov / 360 * pi ) * zNear;
-    fW = fH * aspecty;
-
-	right0 = fW;
-	left0 = -fW;
-	top = fH;
-	bottom = -fH;
-
-    glOrtho( left0, right0, bottom, top, near, far );
-}
-void o2Persp(double lefty, double righty, double bottomy, double topy, double neary, double fary)
-{
-	const GLdouble pi = 3.1415926535897932384626433832795;
-	//GLdouble fovY, aspect;
-	
-	aspect = right0/top;
-	fovY = atan(top/near)/pi*360;
-	
-	gluPerspective(fovY,aspect,neary,fary);
-}
 double Nstep = 1000;//this variable has so much fucking power
 bool go = true;
 static int spin = 0;
 double t=0.0;
 double theta=0.0;
-double omega=1.5;
+double omega=1.0;
 double toDegs(double radian)
 {
 	return radian * (180.0/M_PI);
@@ -61,8 +34,8 @@ double thetadot(double t, double theta, double omega)
 
 double omegadot(double t, double theta, double omega)
 {
-   static double R = 10.9938;  // Length of pendulum
-   static double g = 9.80665;  // Normalized gravitational constant
+   static double R = L;  // Length of pendulum
+   static double g = G;  // Normalized gravitational constant
    static double b = 0.10;  // Frictional damping constant
    static double m = 1.00;  // Mass in normalized gravitational units
    static double A = 0.00;  // Amplitude of initial driving force
@@ -77,44 +50,33 @@ double omegadot(double t, double theta, double omega)
 	
 }
 
-void drawScore(){
-	//push matrix so we don't contaminate matrix we were working in with transformations
-	glPushMatrix();
-		
-		int i, len;
-		//char array to print to screen
-		char label[] = "Score: ";
-		//font used when printing
-		void *font = GLUT_STROKE_ROMAN;
-		//transformations that looked ok; no particular meaning behind numbers
-		glTranslatef(82, 90, 0);
-		glScalef(0.15, 0.15, 0.15);
-		
-		glPushMatrix();
-			glColor3f(1.0,1.0,1.0);
-			glRotatef(180.0,1.0,0.0,0.0);
-			glScalef(0.125,0.125,0.125);
-			glTranslatef(-550.0, 100, 0);
-			//store number of characters to print
-			len = (int) strlen(label);
-			//print every char in label using that font
-			for(i = 0;i<len;i++)
-				glutStrokeCharacter(font, label[i]);
-			//use an ostringstream to turn number into string and print
-/*			std::ostringstream printNum;
-			std::string printy;
-			//put score int into stream
-			printNum << GLOBAL.score;
-			//return stream contents as string
-			printy = printNum.str();
-			//store number of chars to print and print them
-			len = (int) strlen(&printy[0]);
-			for(i = 0;i<len;i++)
-				glutStrokeCharacter(font,printy[i]);
+void showPeriod() {
+    float period = 2 * M_PI * sqrt(L/G);
+    char label[20];
+    sprintf(&label[0], "Period = %.2f", period);
 
-			printNum.str("");
-*/		glPopMatrix();
-	glPopMatrix();
+    glPushMatrix();
+    glClear(GL_DEPTH_BUFFER_BIT);
+
+    void *font = GLUT_STROKE_ROMAN;
+    glColor3f(1.0,0.0,0.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity(); // reset the projection style
+    gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(01, 05, 0);
+    glScalef(0.15, 0.15, 0.15);
+
+    glRotatef(180.0, 1.0, 0.0, 0.0);
+    glScalef(0.1,0.1,0.1);
+    int len = (int) strlen(label);
+    for (int i = 0; i < len; i++) {
+        glutStrokeCharacter(font, label[i]);
+    }
+    glPopMatrix();
 }
 void showFPS(float &fps, int &oldTime, float &actualfps) {
     int currentTime = glutGet(GLUT_ELAPSED_TIME);
@@ -151,7 +113,6 @@ void showFPS(float &fps, int &oldTime, float &actualfps) {
     }
     glPopMatrix();
 }
-
 void step(double &t, double &theta, double &omega )
 {
   // Time step variables
@@ -193,6 +154,7 @@ void drawHud() {//to draw the 2d hud on 3d scene
 
 	//draw 2D stuff
 	showFPS(fps, oldTime, actualfps);
+	showPeriod();
 }
 void display(void)
 {
@@ -235,88 +197,79 @@ void display(void)
 
    /* Draw a coordinate axis */
 
-   glEnable(GL_TEXTURE_2D | GL_DEPTH_TEST);// | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
+   glEnable(GL_TEXTURE_2D);
+   glEnable( GL_DEPTH_TEST);// | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
-//	drawBox(&room[0],true);
-/*	
-    glPushMatrix();
-    glTranslatef(light_0_position[0],light_0_position[1],light_0_position[2]); 
-    glutSolidSphere(0.25,20,20);
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(light_1_position[0],light_1_position[1],light_1_position[2]); 
-    glutSolidSphere(0.25,20,20);
-    glPopMatrix();
+	//drawBox(&room[0],true);
+glPushMatrix();
+glTranslatef(0.0,2.0,0.4);
 
-    glPushMatrix();
-    glTranslatef(light_2_position[0],light_2_position[1],light_2_position[2]); 
-    glutSolidCube(0.25);
-    glPopMatrix();
-    
-    glPushMatrix();
-    glTranslatef(light_3_position[0],light_3_position[1],light_3_position[2]); 
-    glutSolidSphere(0.25, 20, 20);
-    glPopMatrix();
-*/
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100.0);
+    	glBindTexture(GL_TEXTURE_2D, textureID);
+	glPushMatrix();
+	glTranslatef(-0.945,-0.2,0);
+	gluSphere(earth, 0.4, 36, 72);
+	glPopMatrix();
+	
+
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);//bottom of room
       glNormal3d(0,0,-1);
-      glTexCoord3d( 0.0, 0.0, 1.0);   glVertex3d(  0.0,  0.0, 0.0 );
-      glTexCoord3d( 0.0, 1.0, 1.0);   glVertex3d(  0.0, 0.0, 5.0 );
-      glTexCoord3d( 1.0, 1.0, 1.0);   glVertex3d( 0.0, 5.0, 5.0 );
-      glTexCoord3d( 1.0, 0.0, 1.0);   glVertex3d( 0.0,  5.0, 0.0 );
+      glTexCoord3d( 0.0, 0.0, 1.0);   glVertex3d(  -2.5,  -1.0, -1.0 );
+      glTexCoord3d( 0.0, 1.0, 1.0);   glVertex3d(  -2.5, 1.0, -1.0 );
+      glTexCoord3d( 1.0, 1.0, 1.0);   glVertex3d( -0.5, 1.0, -1.0 );
+      glTexCoord3d( 1.0, 0.0, 1.0);   glVertex3d( -0.5,  -1.0, -1.0 );
     glEnd();
 
-  /*  glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBindTexture(GL_TEXTURE_2D, textureID);
+    glBegin(GL_POLYGON);//left
       glNormal3d(0,0,1);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  -2.5,  -1.0, -1.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  -2.5, -1.0, 0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( -0.5, -1.0, 0.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( -0.5,  -1.0, -1.0 );
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);//right
       glNormal3d(-1,0,0);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0,  0.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  -2.5,  1.0,  -1.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  -2.5, 1.0,  0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(  -0.5, 1.0, 0.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(  -0.5,  1.0, -1.0 );
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);//back
       glNormal3d(1,0,0);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0,  0.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d( -2.5, -1.0, -1.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d( -2.5, -1.0, 0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(  -2.5, 1.0, 0.0);
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(  -2.5, 1.0, -1.0);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);//front
       glNormal3d(0,-1,0);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0,  0.0,  0.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0,  0.0, 10.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0,  0.0, 10.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0,  0.0,  0.0 );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(-0.5,-1.0,-1.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(-0.5,-1.0,0.0 );
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d( -0.5,1.0,0.0 );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( -0.5,1.0,-1.0);
     glEnd();
 
     glBindTexture(GL_TEXTURE_2D, textureID);
-    glBegin(GL_POLYGON);
+    glBegin(GL_POLYGON);//top
       glNormal3d(0,1,0);
-      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(  0.0, 10.0,  0.0 );
-      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(  0.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d( 10.0, 10.0, 10.0 );
-      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d( 10.0, 10.0,  0.0 );
+      glTexCoord3d( 0.0, 0.0, 0.0);   glVertex3d(-2.5,-1.0,0.0 );
+      glTexCoord3d( 0.0, 1.0, 0.0);   glVertex3d(-2.5,1.0,0.0  );
+      glTexCoord3d( 1.0, 1.0, 0.0);   glVertex3d(-0.5,1.0,0.0  );
+      glTexCoord3d( 1.0, 0.0, 0.0);   glVertex3d(-0.5,-1.0,0.0  );
     glEnd();
-*/
+glPopMatrix();
 
 	glPopMatrix();
 	glPushMatrix();

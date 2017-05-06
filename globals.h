@@ -9,9 +9,11 @@
 extern const int WINDOW_HEIGHT;
 extern const int WINDOW_WIDTH;
 
+extern float currentTime;
 extern GLuint textureID;
 extern GLUquadric *earth;
 
+extern float shift;
 extern int oldTime;
 extern float actualfps, fps;
 extern double Nstep;

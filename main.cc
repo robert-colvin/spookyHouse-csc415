@@ -18,7 +18,7 @@ using namespace std;
 #define VIEWPORT_MAX 700
 #define VIEWPORT_MIN 100
 #define MAX 100
-
+float shift=0;
 bool filled = !false;
 bool drawAxis = false;
 bool drawSign = false;
@@ -39,35 +39,25 @@ void keyboard(unsigned char key, int x, int y)
 	}
 	if(key == 'd' || key == 'D')
 	{
-		whereIAm.x+=0.5;
-		cout << "x is " << whereIAm.x << endl;	
+		if(whereIAm.x < 35.5)
+			whereIAm.x+=0.5;
+
 	}
 	if(key == 'w' || key == 'W')
 	{
-		if(whereIAm.y < 27.5)
+		if(whereIAm.y < 26.5)
 			whereIAm.y+=0.5;
 	}
 	if(key == 's' || key == 'S')
 	{
-		if(whereIAm.y > -22)
+		if(whereIAm.y > -21)
 			whereIAm.y-=0.5;
 	}
 	if(key == 'a' || key == 'A')
 	{
-		whereIAm.x-=0.5;
-		cout << "x is " << whereIAm.x << endl;	
+		if(whereIAm.x > -11)
+			whereIAm.x-=0.5;
 		
-	}
-	if (key == 'R')
-	{
-		filled = false;
-		drawAxis = false;
-		drawSign = false;
-		zoomy = 0.0;
-		yspin = 0.0; yDeltaSpin = 0.0;
-		xspin = 0.0; xDeltaSpin = 0.0;
-		zspin = 0.0; zDeltaSpin = 0.0;
-
 	}
 	glutPostRedisplay();
 }
@@ -82,9 +72,15 @@ void special(int key, int x, int y)
 	if (key == GLUT_KEY_RIGHT)
 		yspin+=1;
 	if (key == GLUT_KEY_PAGE_UP)
-		whereIAm.z-=0.5;
+	{
+		if(whereIAm.z > -8)
+			whereIAm.z-=0.5;
+	}
 	if (key == GLUT_KEY_PAGE_DOWN)
-		whereIAm.z+=0.5;
+	{
+		if(whereIAm.z < 14)
+			whereIAm.z+=0.5;
+	}
 
 	glutPostRedisplay();
 }
@@ -102,45 +98,47 @@ void renderBitmapString(
 }
 void phaseDisplay(void)
 {
-/*	glMatrixMode(GL_PROJECTION);
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity(); // reset the projection style
-	gluOrtho2D(0.0,100.0,100.0,0.0); // simple ortho
-
+	gluOrtho2D(0.0,WINDOW_WIDTH,WINDOW_HEIGHT,0.0); // simple ortho
+	glViewport(0,0,WINDOW_WIDTH,WINDOW_HEIGHT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-*/
-/*	glPointSize(1.0);
-	glBegin(GL_LINES);
-		glVertex2d(0,0);
-		glVertex2d(5,5);
+	
+
+	glPointSize(2.5);
+	glColor3f(1.0,0.0,0.0);
+	double thetaDeg = toDegs(theta);
+	glTranslatef(shift, thetaDeg, 0);
+	glBegin(GL_POINTS);
+		glVertex2d(0.0,WINDOW_HEIGHT/2);
 	glEnd();
-   */string s;
-   char c[100];
- 
-   void *font = GLUT_BITMAP_TIMES_ROMAN_24;
+	shift+=0.25;
+   glutSwapBuffers();
+   glFlush();
 
-   glClear (GL_COLOR_BUFFER_BIT  );
-   
-
-   glColor3f(1.0,1.0,0.0); 
-   s = "Fire Control Settings";
-   renderBitmapString(-.8,0.8,font,s);
 }
 void phaseSpace()
 {
-	glClearColor(1.0,1.0,1.0,0.0);
-	glLoadIdentity();
-	glClear(GL_COLOR_BUFFER_BIT);
-//   glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
-   glutInitWindowSize (WINDOW_HEIGHT, WINDOW_WIDTH); 
+   glutInitWindowSize (WINDOW_WIDTH, WINDOW_HEIGHT);
    glutInitWindowPosition (100+WINDOW_WIDTH, 100);
    glutCreateWindow ("Phased");
+
+	glClearColor(1.0,1.0,1.0,1.0);
+	glColor3f(0.0,1.0,0.0);
+	glPointSize(1.0);
+   	glMatrixMode(GL_PROJECTION); 
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT);
+	gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT);
+	glMatrixMode(GL_MODELVIEW);
    
+   glutKeyboardFunc(keyboard);
+   glutSpecialFunc(special);
+   glutIdleFunc(mover);
    glutDisplayFunc(phaseDisplay); 
    glutReshapeFunc(reshape);
-
-   glutKeyboardFunc(keyboard);
 
 }
 int main(int argc, char** argv)
@@ -152,8 +150,6 @@ int main(int argc, char** argv)
    glutCreateWindow ("Welcome to Hell");
    glewInit();
    init ();
-   //loadTextures();
-//   glutMouseFunc(mouse);
    glutKeyboardFunc(keyboard);
    glutSpecialFunc(special);
    glutIdleFunc(mover);
