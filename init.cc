@@ -66,6 +66,7 @@ void init(void)
    glClearColor (0.0, 0.0, 0.0, 0.0);
    glShadeModel (GL_FLAT);
   
+   //soil it up
    loadTextures();
    
    earth = gluNewQuadric();
@@ -75,6 +76,7 @@ void init(void)
    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
    glShadeModel(GL_SMOOTH);
 
+//lights' qualities follow
 // these are material properties
 
    material_ambient  = { 0.5, 0.5, 0.5, 1.0 };
@@ -140,7 +142,6 @@ void init(void)
    glLightfv(GL_LIGHT3, GL_DIFFUSE, light_3_diffuse);
    glLightfv(GL_LIGHT3, GL_SPECULAR, light_3_specular);
  
-
    glEnable(GL_LIGHTING);
    glEnable(GL_LIGHT0);
    glEnable(GL_LIGHT1);

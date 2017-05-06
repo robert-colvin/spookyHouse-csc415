@@ -18,14 +18,15 @@ using namespace std;
 #define VIEWPORT_MAX 700
 #define VIEWPORT_MIN 100
 #define MAX 100
+
+//for phase space
 float shift=0;
-bool filled = !false;
-bool drawAxis = false;
-bool drawSign = false;
+//for movement
 vertex whereIAm = (vertex) {2, 2, 2, 1};
 float zoomy=0.0, strafey=0.0, lookx=0.0, looky=0.0, lookUp=0.0;
-int persp = 1;
 
+float xspin,yspin,zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin;
+//just movey stuff
 void keyboard(unsigned char key, int x, int y)
 {
 	if (key == 'q' || key == 'Q') 
@@ -41,7 +42,6 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		if(whereIAm.x < 35.5)
 			whereIAm.x+=0.5;
-
 	}
 	if(key == 'w' || key == 'W')
 	{
@@ -57,7 +57,6 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		if(whereIAm.x > -11)
 			whereIAm.x-=0.5;
-		
 	}
 	glutPostRedisplay();
 }
@@ -84,18 +83,7 @@ void special(int key, int x, int y)
 
 	glutPostRedisplay();
 }
-void renderBitmapString(
-		float x, 
-		float y, 
-		void *font, 
-		string stringval) {  
-  int i;
-  glRasterPos2f(x, y);
-  glColor3f(1.0,1.0,1.0);
-  for (i=0; i < stringval.size(); i++) {
-    glutBitmapCharacter(font, stringval.at(i) );
-  }
-}
+//draw dots in phase space representing pendulum movement
 void phaseDisplay(void)
 {
 	glMatrixMode(GL_PROJECTION);
@@ -118,6 +106,7 @@ void phaseDisplay(void)
    glFlush();
 
 }
+//create phase space window and give it properties
 void phaseSpace()
 {
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
@@ -126,8 +115,6 @@ void phaseSpace()
    glutCreateWindow ("Phased");
 
 	glClearColor(1.0,1.0,1.0,1.0);
-	glColor3f(0.0,1.0,0.0);
-	glPointSize(1.0);
    	glMatrixMode(GL_PROJECTION); 
 	glLoadIdentity();
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -155,7 +142,8 @@ int main(int argc, char** argv)
    glutIdleFunc(mover);
    glutDisplayFunc(display); 
    glutReshapeFunc(reshape);
-
+	
+	//create phase space
 	phaseSpace();
 
    glutMainLoop();

@@ -6,6 +6,7 @@
 // one location. In the case of constants, make a specific header where you define 
 // them and include it before main.c
 
+extern float xspin,yspin,zspin,xDeltaSpin,yDeltaSpin,zDeltaSpin;
 extern const int WINDOW_HEIGHT;
 extern const int WINDOW_WIDTH;
 

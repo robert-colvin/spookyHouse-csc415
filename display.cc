@@ -15,14 +15,17 @@ using namespace std;
 #define L	10.9938
 #define G	9.80665
 
+//for perspective view
 double left0=-1.0;double right0=1.0;double bottom=-1.0;double top=1.0;double near=1.0;double far=50.0;double aspect = 0.0; double fovY = 0.0;
+//for fps counter
 int oldTime=0.0; float actualfps=0.0,fps=0.0;
-double Nstep = 1000;//this variable has so much fucking power
-bool go = true;
+//pend stats
+double Nstep = 1000;
 static int spin = 0;
 double t=0.0;
 double theta=0.0;
 double omega=1.0;
+//convert radians to degrees
 double toDegs(double radian)
 {
 	return radian * (180.0/M_PI);
@@ -49,15 +52,18 @@ double omegadot(double t, double theta, double omega)
    return -g/R*sin(theta)-drag+kick;
 	
 }
-
+//print 2d period calculation to 3d screen
 void showPeriod() {
+    //probably a janky period equation I found for a pendulum
     float period = 2 * M_PI * sqrt(L/G);
     char label[20];
+    //concatenate number with string
     sprintf(&label[0], "Period = %.2f", period);
 
     glPushMatrix();
     glClear(GL_DEPTH_BUFFER_BIT);
 
+    //adjust draw space and draw
     void *font = GLUT_STROKE_ROMAN;
     glColor3f(1.0,0.0,0.0);
     glMatrixMode(GL_PROJECTION);
@@ -69,7 +75,7 @@ void showPeriod() {
 
     glTranslatef(01, 05, 0);
     glScalef(0.15, 0.15, 0.15);
-
+	
     glRotatef(180.0, 1.0, 0.0, 0.0);
     glScalef(0.1,0.1,0.1);
     int len = (int) strlen(label);
@@ -78,6 +84,7 @@ void showPeriod() {
     }
     glPopMatrix();
 }
+//like above
 void showFPS(float &fps, int &oldTime, float &actualfps) {
     int currentTime = glutGet(GLUT_ELAPSED_TIME);
     char str_fps[15];
@@ -137,11 +144,10 @@ void step(double &t, double &theta, double &omega )
         t = t + h;
 
 }
-
+//idle func
 void mover(void)
 {
-	if(go)
-		step(t,theta,omega);
+	step(t,theta,omega);
 	glutPostRedisplay();
 }
 void drawHud() {//to draw the 2d hud on 3d scene
@@ -158,22 +164,18 @@ void drawHud() {//to draw the 2d hud on 3d scene
 }
 void display(void)
 {
+   //reset scary dark 3d world after shifting to 2d at end of every frame
    glMatrixMode (GL_PROJECTION);
    glLoadIdentity ();
    glClearColor(0.0,0.0,0.0,0.0);
    glFrustum (-1.0,1.0,-1.0,1.0,1.0,150.0);
-  
+	
+   //define pendulum points  
    glMatrixMode (GL_MODELVIEW);
-   struct pentagon faces[7];
-   struct pentagon room[7];
    
    float *M;
    int i, j;
    
-
-   defineBox(&faces[0]);
-   defineRoom(&room[0]);
-
    glClear (GL_COLOR_BUFFER_BIT);
    glColor4f (1.0, 1.0, 1.0, 1.0);
 
@@ -185,28 +187,30 @@ void display(void)
    // Let's manually move the camera back
    
    glTranslatef(0.0, 0.0, -10.0);
-
-  
+	//for camera movement
 	glRotatef(zspin,0.0,0.0,1.0);
 	glRotatef(xspin,1.0,0.0,0.0);
 	glRotatef(yspin,0.0,1.0,0.0);
    gluLookAt (0, 0, 0.5, 0.0, -1.0, 0.5, 0.0, 0.0, 1.0);
-
+	
 	glTranslatef(whereIAm.x, whereIAm.y, whereIAm.z);
 /* DO NOT MODIFY ANYTHING ELSE */
 
    /* Draw a coordinate axis */
 
+   //this line cost me hours of brainpower
+   //texture_2d enable has to be petty and get its own enable
    glEnable(GL_TEXTURE_2D);
-   glEnable( GL_DEPTH_TEST);// | GL_LIGHTING | GL_LIGHT0 | GL_LIGHT1);
+   glEnable( GL_DEPTH_TEST);
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glPushMatrix();
 	glScalef(25.0,25.0,25.0);
 	glTranslatef(1,-1.75,0);
-	//drawBox(&room[0],true);
+	
+	//draw and texture room and what I think 'bob' means from the rubric
 glPushMatrix();
-glTranslatef(0.0,2.0,0.4);
+   glTranslatef(0.0,2.0,0.4);
 
 	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100.0);
     	glBindTexture(GL_TEXTURE_2D, textureID);
@@ -272,21 +276,28 @@ glTranslatef(0.0,2.0,0.4);
 glPopMatrix();
 
 	glPopMatrix();
+
+	//alter the multiverse based on pedulum angle and where it needs to be placed
 	glPushMatrix();
 	glTranslatef(1.9938,0.0,0.0);
 	glRotatef(-90.0,0.0,1.0,0.0);
 	glRotatef(toDegs(theta), 0.0, 1.0, 0.0);
-
 	glTranslatef(-1.9938,0.0,0.0);
-   	drawBox(&faces[0],false);
-	glPushMatrix();
-	glScalef(0.0025,0.0025,0.0025);
-	glRotatef(180.0,0.0,1.0,0.0);
-	glTranslatef(-350.0,1220.0,-200.0);
-	glRotatef(270.0,1.0,0.0,0.0);
-	glPopMatrix();
+	//draw pendulum
+
+	glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 100.0);
+    	glBindTexture(GL_TEXTURE_2D, textureID);
+	gluSphere(earth, 0.3, 36, 72);
+	//draw pendulum string
+	glColor4f(1.0,1.0,1.0,1.0);
+        glBegin(GL_LINES);
+	    	glVertex3f(1.9938, 0.0, 0.0);
+		glVertex3f(-0.5, 0.0, 0.0);
+	glEnd();
+	//glPopMatrix();
 	glPopMatrix();
 
+	//do the 2d thing last
 	glClear(GL_DEPTH_BUFFER_BIT);
 	glPushMatrix();
 	drawHud();

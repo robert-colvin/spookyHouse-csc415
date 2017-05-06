@@ -5,7 +5,7 @@
 CC = g++
 LDLIBS =  -lglut -lGL -lGLU -lm libSOIL.a -lGLEW
 HEADERS = opengl.h structs.h globals.h constants.h prototypes.h SOIL.h sysincludes.h
-OBJS = init.o defineBox.o drawPend.o reshape.o display.o loadtex.o
+OBJS = init.o defineBox.o reshape.o display.o loadtex.o
 
 debug ?= n
 ifeq ($(debug), y)
@@ -31,9 +31,6 @@ loadtex.o : loadtex.cc globals.h
 
 defineBox.o : defineBox.cc $(HEADERS)
 	$(CC) $(CFLAGS) defineBox.cc -c
-
-drawPend.o : drawPend.cc $(HEADERS)
-	$(CC) $(CFLAGS) drawPend.cc -c
 
 reshape.o : reshape.cc $(HEADERS)
 	$(CC) $(CFLAGS) reshape.cc -c
